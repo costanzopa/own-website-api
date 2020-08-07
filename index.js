@@ -1,13 +1,23 @@
+const { locale } = require('moment');
 const mongoose = require('mongoose');
 const app = require('./app');
-const port = process.env.PORT || 8080;
-const { API_VERSION, IP_SERVER, PORT_DB, HOST_DB } = require('./config');
+const {
+  API_VERSION,
+  IP_SERVER,
+  PORT_SERVER,
+  PORT_DB,
+  HOST_DB,
+} = require('./config');
+const port = process.env.PORT || PORT_SERVER;
+const host = process.env.HOST || IP_SERVER;
+const db_url =
+  process.env.DB_URL || `mongodb://${HOST_DB}:${PORT_DB}/own-website-api-db`;
 
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
 mongoose.connect(
-  `mongodb://${HOST_DB}:${PORT_DB}/own-website-api-db`,
+  db_url,
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err, res) => {
     if (err) {
@@ -19,7 +29,7 @@ mongoose.connect(
         console.log('######################');
         console.log('###### API REST ######');
         console.log('######################');
-        console.log(`http://${IP_SERVER}:${port}/api/${API_VERSION}/`);
+        console.log(`http://${host}:${port}/api/${API_VERSION}/`);
       });
     }
   }

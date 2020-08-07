@@ -6,10 +6,16 @@ services:
     container_name: own-website-api
     networks:
       - own-website-api-network
+    environment:
+      - PORT=8080
+      - HOST='localhost'
+      - DB_URL="mongodb://own-website-api-db:27017/own-website-api-db"
     depends_on:
       - own-website-api-db
     ports:
       - '8080:8080'
+    volumes:
+      - .:/app
 
   own-website-api-db:
     restart: always
