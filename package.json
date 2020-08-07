@@ -1,0 +1,19 @@
+{
+  "name": "own-website-api",
+  "version": "1.0.0",
+  "description": "Api for my own website ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/costanzopa/own-website-api.git"
+  },
+  "author": "Pablo Costanzo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/costanzopa/own-website-api/issues"
+  },
+  "homepage": "https://github.com/costanzopa/own-website-api#readme"
+}
