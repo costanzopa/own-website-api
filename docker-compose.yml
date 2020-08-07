@@ -1,0 +1,26 @@
+version: '3.6'
+
+services:
+  own-website-api:
+    image: costanzopa/own-website-api
+    container_name: own-website-api
+    networks:
+      - own-website-api-network
+    depends_on:
+      - own-website-api-db
+    ports:
+      - '8080:8080'
+
+  own-website-api-db:
+    restart: always
+    image: mongo
+    ports:
+      - '27017:27017'
+    container_name: own-website-api-db
+    networks:
+      - own-website-api-network
+    volumes:
+      - ./data:/data/db
+
+networks:
+  own-website-api-network:
