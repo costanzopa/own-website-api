@@ -2,13 +2,13 @@ version: '3.6'
 
 services:
   own-website-api:
-    image: costanzopa/own-website-api
+    build: .
     container_name: own-website-api
     networks:
       - own-website-api-network
     environment:
       - PORT=8080
-      - HOST='localhost'
+      - HOST=localhost
       - DB_URL="mongodb://own-website-api-db:27017/own-website-api-db"
     depends_on:
       - own-website-api-db
