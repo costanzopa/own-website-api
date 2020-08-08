@@ -9,7 +9,7 @@ services:
     environment:
       - PORT=8080
       - HOST=localhost
-      - DB_URL="mongodb://own-website-api-db:27017/own-website-api-db"
+      - DB_URL=mongodb://own-website-api-db:27017/own-website-api-db
     depends_on:
       - own-website-api-db
     ports:
