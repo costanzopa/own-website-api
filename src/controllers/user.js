@@ -1,6 +1,6 @@
-const bcrypt = require('bcryptjs');
-const User = require('../models/user.js');
-const jwt = require('../services/jwt.js');
+const bcrypt = require("bcryptjs");
+const User = require("../models/user.js");
+const jwt = require("../services/jwt.js");
 
 const signUp = (req, res) => {
   const user = new User();
@@ -9,28 +9,28 @@ const signUp = (req, res) => {
   user.name = name;
   user.lastname = lastname;
   user.email = email.toLowerCase();
-  user.role = 'admin';
+  user.role = "admin";
   user.active = false;
   if (!password || !repeatPassword) {
-    res.status(404).send({ message: 'Las contraseñas son obligatorias.' });
+    res.status(404).send({ message: "Las contraseñas son obligatorias." });
   } else {
     if (password !== repeatPassword) {
-      res.status(404).send({ message: 'Las contraseñas no son iguales.' });
+      res.status(404).send({ message: "Las contraseñas no son iguales." });
     } else {
       bcrypt.hash(password, 8, function (err, hash) {
         if (err) {
           res
             .status(500)
-            .send({ message: 'Error al encriptar la contraseña.' });
+            .send({ message: "Error al encriptar la contraseña." });
         } else {
           user.password = hash;
 
           user.save((err, userStored) => {
             if (err) {
-              res.status(500).send({ message: 'El usuario ya existe.' });
+              res.status(500).send({ message: "El usuario ya existe." });
             } else {
               if (!userStored) {
-                res.status(404).send({ message: 'Error al crear el usuario.' });
+                res.status(404).send({ message: "Error al crear el usuario." });
               } else {
                 res.status(200).send({ user: userStored });
               }
@@ -49,21 +49,21 @@ function signIn(req, res) {
 
   User.findOne({ email }, (err, userStored) => {
     if (err) {
-      res.status(500).send({ message: 'Error del servidor.' });
+      res.status(500).send({ message: "Error del servidor." });
     } else {
       if (!userStored) {
-        res.status(404).send({ message: 'Usuario no encontrado.' });
+        res.status(404).send({ message: "Usuario no encontrado." });
       } else {
         bcrypt.compare(password, userStored.password, (err, check) => {
           if (err) {
-            res.status(500).send({ message: 'Error del servidor.' });
+            res.status(500).send({ message: "Error del servidor." });
           } else if (!check) {
-            res.status(404).send({ message: 'La contraseña es incorrecta.' });
+            res.status(404).send({ message: "La contraseña es incorrecta." });
           } else {
             if (!userStored.active) {
               res
                 .status(200)
-                .send({ code: 200, message: 'El usuario no se ha activado.' });
+                .send({ code: 200, message: "El usuario no se ha activado." });
             } else {
               res.status(200).send({
                 accessToken: jwt.createAccessToken(userStored),
@@ -77,7 +77,31 @@ function signIn(req, res) {
   });
 }
 
+const getUsers = (req, res) => {
+  User.find().then((users) => {
+    if (!users) {
+      res.status(404).send({ message: "No se ha encontrado ningun usuario." });
+    } else {
+      res.status(200).send({ users });
+    }
+  });
+};
+
+const getUsersActive = (req, res) => {
+  const query = req.query;
+
+  User.find({ active: query.active }).then((users) => {
+    if (!users) {
+      res.status(404).send({ message: "No se ha encontrado ningun usuario." });
+    } else {
+      res.status(200).send({ users });
+    }
+  });
+};
+
 module.exports = {
   signUp,
   signIn,
+  getUsers,
+  getUsersActive,
 };
