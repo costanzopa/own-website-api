@@ -7,6 +7,7 @@ const { API_VERSION } = require("./config.js");
 // Load routings
 const authRoutes = require("./routers/auth.js");
 const userRoutes = require("./routers/user.js");
+const menuRoutes = require("./routers/menu.js");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -26,5 +27,6 @@ app.use((req, res, next) => {
 // Router Basic
 app.use(`/api/${API_VERSION}`, authRoutes);
 app.use(`/api/${API_VERSION}`, userRoutes);
+app.use(`/api/${API_VERSION}`, menuRoutes);
 
 module.exports = app;
